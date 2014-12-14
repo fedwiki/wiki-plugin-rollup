@@ -7,12 +7,12 @@
       "text": "The Rollup plugin repeats computations spread over a number of wiki pages and compares the results to those stored in a previously computed rollup."
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "db05c121422ff9f6",
-      "text": "<h3> Input Datasets"
+      "text": "<h3>Input Datasets</h3>"
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "9d635b954d74f18b",
       "text": "The rollup is guided by a dataset captioned \"Material Summary\". Each row corresponds to a wiki page that can recompute the quantities on that page. One column, titled <b>Material</b>, names those pages. The remaining columns provide quantities that are computed on those pages."
     },
@@ -91,9 +91,9 @@
       "text": "The computations used by the beer song expect reference data to be provided somewhere nearby. When normally viewed, this data appears on the same page as the calculation. However, here we will provide reference data directly to the Rollup plugin as this is the context where rollup computations take place."
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "1863deeb06391981",
-      "text": "<h3> Rollup Results"
+      "text": "<h3>Rollup Results</h3>"
     },
     {
       "type": "paragraph",
@@ -111,32 +111,32 @@
       "text": "Computation commences immediately. Pages are fetched five per second. Results are displayed in a color code as they are completed. Details are available in hover text."
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "10fd27c938ff580a",
       "text": "<b>green</b> means the new results agreed to four places to the right of the decimal."
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "40e9ce7310099fd6",
       "text": "<b>yellow</b> means the new results agreed only to the left of the decimal, the whole number part."
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "37e6a40e250eafa3",
       "text": "<b>red</b> means the new results disagreed in the whole number part when rounded to a whole number. This could still be a small difference as in 9.501 vs 9.499."
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "6dd745674af42517",
       "text": "Page names appear as hyperlinks at the beginning of each row. A <b>red x</b> appears by the name if any problems are encountered calculating. Hover over the x for details. Click the link to investigate."
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "51f6f6a226f80455",
-      "text": "<h3> Rank Ordering"
+      "text": "<h3>Rank Ordering</h3>"
     },
     {
-      "type": "paragraph",
+      "type": "html",
       "id": "3ac19aa4567730fe",
       "text": "The Rollup plugin will assign a <b>Rank</b> to each result based on a <b>Total Score</b> reported by each calculation. The largest score has the lowest rank: 1. If the previous rollup has these columns then they will be displayed and colored using the same color code."
     },
@@ -667,6 +667,127 @@
         "text": "Rank ordering waits until all computations are complete before it begins."
       },
       "date": 1351465631622
+    },
+    {
+      "type": "edit",
+      "id": "db05c121422ff9f6",
+      "item": {
+        "type": "html",
+        "id": "db05c121422ff9f6",
+        "text": "<h3> Input Datasets"
+      },
+      "date": 1418371637078
+    },
+    {
+      "type": "edit",
+      "id": "db05c121422ff9f6",
+      "item": {
+        "type": "html",
+        "id": "db05c121422ff9f6",
+        "text": "<h3>Input Datasets</h3>"
+      },
+      "date": 1418371646068
+    },
+    {
+      "type": "edit",
+      "id": "9d635b954d74f18b",
+      "item": {
+        "type": "html",
+        "id": "9d635b954d74f18b",
+        "text": "The rollup is guided by a dataset captioned \"Material Summary\". Each row corresponds to a wiki page that can recompute the quantities on that page. One column, titled <b>Material</b>, names those pages. The remaining columns provide quantities that are computed on those pages."
+      },
+      "date": 1418371647750
+    },
+    {
+      "type": "edit",
+      "id": "1863deeb06391981",
+      "item": {
+        "type": "html",
+        "id": "1863deeb06391981",
+        "text": "<h3> Rollup Results"
+      },
+      "date": 1418371654661
+    },
+    {
+      "type": "edit",
+      "id": "1863deeb06391981",
+      "item": {
+        "type": "html",
+        "id": "1863deeb06391981",
+        "text": "<h3>Rollup Results</h3>"
+      },
+      "date": 1418371665555
+    },
+    {
+      "type": "edit",
+      "id": "10fd27c938ff580a",
+      "item": {
+        "type": "html",
+        "id": "10fd27c938ff580a",
+        "text": "<b>green</b> means the new results agreed to four places to the right of the decimal."
+      },
+      "date": 1418371670572
+    },
+    {
+      "type": "edit",
+      "id": "40e9ce7310099fd6",
+      "item": {
+        "type": "html",
+        "id": "40e9ce7310099fd6",
+        "text": "<b>yellow</b> means the new results agreed only to the left of the decimal, the whole number part."
+      },
+      "date": 1418371671732
+    },
+    {
+      "type": "edit",
+      "id": "37e6a40e250eafa3",
+      "item": {
+        "type": "html",
+        "id": "37e6a40e250eafa3",
+        "text": "<b>red</b> means the new results disagreed in the whole number part when rounded to a whole number. This could still be a small difference as in 9.501 vs 9.499."
+      },
+      "date": 1418371672750
+    },
+    {
+      "type": "edit",
+      "id": "6dd745674af42517",
+      "item": {
+        "type": "html",
+        "id": "6dd745674af42517",
+        "text": "Page names appear as hyperlinks at the beginning of each row. A <b>red x</b> appears by the name if any problems are encountered calculating. Hover over the x for details. Click the link to investigate."
+      },
+      "date": 1418371674782
+    },
+    {
+      "type": "edit",
+      "id": "51f6f6a226f80455",
+      "item": {
+        "type": "html",
+        "id": "51f6f6a226f80455",
+        "text": "<h3> Rank Ordering"
+      },
+      "date": 1418371676357
+    },
+    {
+      "type": "edit",
+      "id": "51f6f6a226f80455",
+      "item": {
+        "type": "html",
+        "id": "51f6f6a226f80455",
+        "text": "<h3>Rank Ordering</h3>"
+      },
+      "date": 1418371684278
+    },
+    {
+      "type": "edit",
+      "id": "3ac19aa4567730fe",
+      "item": {
+        "type": "html",
+        "id": "3ac19aa4567730fe",
+        "text": "The Rollup plugin will assign a <b>Rank</b> to each result based on a <b>Total Score</b> reported by each calculation. The largest score has the lowest rank: 1. If the previous rollup has these columns then they will be displayed and colored using the same color code."
+      },
+      "date": 1418371686846
     }
-  ]
+  ],
+  "plugin": "rollup"
 }
