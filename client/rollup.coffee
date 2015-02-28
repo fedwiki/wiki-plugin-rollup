@@ -1,3 +1,10 @@
+###
+ * Federated Wiki : Rollup Plugin
+ *
+ * Licensed under the MIT license.
+ * https://github.com/fedwiki/wiki-plugin-rollup/blob/master/LICENSE.txt
+###
+
 window.plugins.rollup =
   emit: (div, item) ->
   bind: (div, item) ->
