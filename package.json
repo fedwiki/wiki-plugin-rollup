@@ -33,7 +33,7 @@
     "grunt-contrib-watch": "~0.6",
     "grunt-git-authors": "~3"
   },
-  "licenses": "MIT",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/fedwiki/wiki-plugin-rollup.git"
