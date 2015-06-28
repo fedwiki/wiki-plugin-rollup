@@ -31,11 +31,6 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask( "update-authors", function () {
-    var getAuthors = require("grunt-git-authors"),
-    done = this.async();
-
-
   grunt.registerTask('build', ['coffee']);
   grunt.registerTask('default', ['build']);
 
