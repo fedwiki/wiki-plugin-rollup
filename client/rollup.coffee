@@ -9,7 +9,7 @@ window.plugins.rollup =
   emit: (div, item) ->
   bind: (div, item) ->
 
-    div.dblclick -> wiki.textEditor div, item
+    div.on 'dblclick', () -> wiki.textEditor div, item
 
     div.append """
       <style>
