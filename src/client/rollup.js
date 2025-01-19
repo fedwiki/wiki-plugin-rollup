@@ -1,127 +1,162 @@
-###
+/*
  * Federated Wiki : Rollup Plugin
  *
  * Licensed under the MIT license.
  * https://github.com/fedwiki/wiki-plugin-rollup/blob/master/LICENSE.txt
-###
+ */
 
-window.plugins.rollup =
-  emit: (div, item) ->
-  bind: (div, item) ->
+window.plugins.rollup = {
+  emit: (div, item) => {},
+  bind: (div, item) => {
+    div.on('dblclick', () => wiki.textEditor(div, item))
 
-    div.on 'dblclick', () -> wiki.textEditor div, item
-
-    div.append """
+    div.append(`
       <style>
         td.material {overflow:hidden;}
         td.score {text-align:right; width:25px}
       </style>
-    """
+    `)
 
-    asValue = (obj) ->
-      return NaN unless obj?
-      switch obj.constructor
-        when Number then obj
-        when String then +obj
-        when Array then asValue(obj[0])
-        when Object then asValue(obj.value)
-        when Function then obj()
-        else NaN
+    const asValue = obj => {
+      if (obj == null) return NaN
+      switch (obj.constructor) {
+        case Number:
+          return obj
+        case String:
+          return +obj
+        case Array:
+          return asValue(obj[0])
+        case Object:
+          return asValue(obj.value)
+        case Function:
+          return obj()
+        default:
+          return NaN
+      }
+    }
 
-    attach = (search) ->
-      wiki.log 'attach', wiki.getDataNodes div
-      for elem in wiki.getDataNodes div
-        wiki.log 'attach loop', $(elem).data('item').text
-        if (source = $(elem).data('item')).text.indexOf(search) >= 0
+    const attach = search => {
+      wiki.log('attach', wiki.getDataNodes(div))
+      for (const elem of wiki.getDataNodes(div)) {
+        wiki.log('attach loop', $(elem).data('item').text)
+        const source = $(elem).data('item')
+        if (source.text.indexOf(search) >= 0) {
           return source
-      throw new Error "can't find dataset with caption #{search}"
+        }
+      }
+      throw new Error(`can't find dataset with caption ${search}`)
+    }
 
-    reference = attach "Materials Summary"
+    const reference = attach('Materials Summary')
 
-    display = (calculated, state) ->
-      row = state.row
-      $row = state.$row
-      for col in reference.columns
-        if col == 'Material'
-          label = wiki.resolveLinks "[[#{row.Material}]]"
-          if calculated
-            if state.errors.length > 0
-              errors = (e.message.replace(/"/g,"'") for e in state.errors).join "\n"
-              $row.append """<td class="material">#{label} <span style="color:red;" title="#{errors}">✘</span></td>"""
-            else
-              $row.append """<td class="material">#{label}</td>"""
-          else
-            $row.append """<td class="material">#{label}</td>"""
-        else
-          old = asValue row[col]
-          now = asValue state.input[col]
-          if calculated && now?
-            color = if old.toFixed(4) == now.toFixed(4)
-              'green'
-            else if old.toFixed(0) == now.toFixed(0)
-              'orange'
-            else
-              'red'
-            title = "#{row.Material}\n#{col}\nold #{old.toFixed 4}\nnow #{now.toFixed 4}"
-            $row.append """<td class="score" title="#{title}" data-thumb="#{col}" style="color:#{color};">#{old.toFixed 0}</td>"""
-          else
-            title = "#{row.Material}\n#{col}\n#{old.toFixed 4}"
-            $row.append """<td class="score" title="#{title}" data-thumb="#{col}">#{old.toFixed 0}</td>"""
+    const display = (calculated, state) => {
+      const row = state.row
+      const $row = state.$row
+      for (const col of reference.columns) {
+        if (col == 'Material') {
+          const label = wiki.resolveLinks(`[[${row.Material}]]`)
+          if (calculated) {
+            if (state.errors.length > 0) {
+              const errors = state.errors.map(e => e.message.replace(/"/g, "'")).join('\n')
+              $row.append(`<td class="material">${label} <span style="color:red;" title="${errors}">✘</span></td>`)
+            } else {
+              $row.append(`<td class="material">${label}</td>`)
+            }
+          } else {
+            $row.append(`<td class="material">${label}</td>`)
+          }
+        } else {
+          const old = asValue(row[col])
+          const now = asValue(state.input[col])
+          if (calculated && now != null) {
+            const color =
+              old.toFixed(4) == now.toFixed(4) ? 'green' : old.toFixed(0) == now.toFixed(0) ? 'orange' : 'red'
+            const title = `${row.Material}\n${col}\nold ${old.toFixed(4)}\nnow ${now.toFixed(4)}`
+            $row.append(
+              `<td class="score" title="${title}" data-thumb="${col}" style="color:${color};">${old.toFixed(0)}</td>`,
+            )
+          } else {
+            const title = `${row.Material}\n${col}\n${old.toFixed(4)}`
+            $row.append(`<td class="score" title="${title}" data-thumb="${col}">${old.toFixed(0)}</td>`)
+          }
+        }
+      }
+    }
 
-    perform = (state, plugin, done) ->
-      if state.methods.length > 0
-        plugin.eval state, state.methods.shift(), state.input, (state, output) ->
-           state.output = output
-           _.extend state.input, output
-           perform state, plugin, done
-      else
-        return done state
+    const perform = (state, plugin, done) => {
+      if (state.methods.length > 0) {
+        plugin.eval(state, state.methods.shift(), state.input, (state, output) => {
+          state.output = output
+          Object.assign(state.input, output)
+          perform(state, plugin, done)
+        })
+      } else {
+        return done(state)
+      }
+    }
 
-    timeout = (delay, done) ->
-      setTimeout done, delay
+    const timeout = (delay, done) => {
+      setTimeout(done, delay)
+    }
 
-    recalculate = (delay, state, done) ->
-      timeout delay, ->
-        wiki.getPlugin 'method', (plugin) ->
-          $.getJSON "/#{state.slug}.json", (data) ->
-            state.methods = _.filter data.story, (item) -> item.type == 'method'
-            perform state, plugin, done
+    const recalculate = (delay, state, done) => {
+      timeout(delay, () => {
+        wiki.getPlugin('method', plugin => {
+          $.getJSON(`/${state.slug}.json`, data => {
+            state.methods = data.story.filter(item => item.type == 'method')
+            perform(state, plugin, done)
+          })
+        })
+      })
+    }
 
-    radar = (input={}) ->
-      candidates = $(".item:lt(#{$('.item').index(div)})")
-      output = _.extend {}, input
-      for elem in candidates
+    const radar = (input = {}) => {
+      const candidates = $(`.item:lt(${$('.item').index(div)})`)
+      const output = Object.assign({}, input)
+      for (let elem of candidates) {
         elem = $(elem)
-        if elem.hasClass 'radar-source'
-          _.extend output, elem.get(0).radarData()
-        else if elem.hasClass 'data'
-          _.extend output, elem.data('item').data[0]
+        if (elem.hasClass('radar-source')) {
+          Object.assign(output, elem.get(0).radarData())
+        } else if (elem.hasClass('data')) {
+          Object.assign(output, elem.data('item').data[0])
+        }
+      }
       return output
+    }
 
-    reindex = (results) ->
-      wiki.log 'reindex', results
-      sorted = _.sortBy results, (state) -> -asValue(state.input['Total Score'])
-      for state, index in sorted
-        state.input.Rank = "#{index+1}"
-      for state in results
+    const reindex = results => {
+      wiki.log('reindex', results)
+      const sorted = results.sort((a, b) => asValue(b.input['Total Score']) - asValue(a.input['Total Score']))
+      sorted.forEach((state, index) => {
+        state.input.Rank = `${index + 1}`
+      })
+      results.forEach(state => {
         state.$row.empty()
-        display true, state
+        display(true, state)
+      })
+    }
 
-    div.append ($table = $ """<table/>""")
-    rows = _.sortBy reference.data, (row) -> -asValue(row['Total Score'])
-    delay = 0
-    results = []
-    remaining = rows.length
-    for row in rows
-      slug = wiki.asSlug row.Material
-      $table.append ($row = $ """<tr class="#{slug}">""")
-      state = {$row, row, slug, input: radar(), errors: []}
-      display false, state
+    const $table = $(`<table/>`)
+    div.append($table)
+    const rows = reference.data.sort((a, b) => -asValue(b['Total Score']) - -asValue(a['Total Score']))
+    let delay = 0
+    const results = []
+    let remaining = rows.length
+    for (const row of rows) {
+      const slug = wiki.asSlug(row.Material)
+      const $row = $(`<tr class="${slug}">`)
+      $table.append($row)
+      const state = { $row, row, slug, input: radar(), errors: [] }
+      display(false, state)
       delay += 200
-      recalculate delay, state, (state)->
+      recalculate(delay, state, state => {
         state.$row.empty()
         state.input.Rank = state.row.Rank
-        display true, state
-        results.push state
+        display(true, state)
+        results.push(state)
         remaining -= 1
-        reindex(results) unless remaining
+        if (!remaining) reindex(results)
+      })
+    }
+  },
+}
