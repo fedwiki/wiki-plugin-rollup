@@ -1,6 +1,6 @@
 {
   "name": "wiki-plugin-rollup",
-  "version": "0.3.0",
+  "version": "0.4.0-rc.0",
   "description": "Federated Wiki - Rollup Plug-in",
   "keywords": [
     "wiki",
@@ -13,27 +13,25 @@
     "url": "http://ward.fed.wiki.org"
   },
   "contributors": [
-    {
-      "name": "Nick Niemeir",
-      "email": "nick.niemeir@gmail.com",
-      "url": "http://nrn.io"
-    },
-    {
-      "name": "Paul Rodwell",
-      "email": "paul.rodwell@btinternet.com",
-      "url": "http://wiki-paul90.rhcloud.com"
-    }
+    "Ward Cunningham <ward@c2.com>",
+    "Nick Niemeir <nick.niemeir@gmail.com>",
+    "Paul Rodwell <paul.rodwell@btinternet.com>"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npm run clean; node --no-warnings scripts/build-client.js",
+    "clean": "rm client/rollup.js client/rollup.js.map",
+    "prettier:format": "prettier --write './**/*.js'",
+    "prettier:check": "prettier --check ./**/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "update-authors": "node scripts/update-authors.cjs"
   },
   "devDependencies": {
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "grunt": "^1.6.1",
-    "grunt-contrib-coffee": "^2.1.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-git-authors": "^3.2.0"
+    "@eslint/js": "^9.18.0",
+    "esbuild": "^0.24.2",
+    "eslint": "^9.18.0",
+    "globals": "^15.14.0",
+    "grunt-git-authors": "^3.2.0",
+    "prettier": "^3.4.2"
   },
   "license": "MIT",
   "repository": {
@@ -43,7 +41,8 @@
   "bugs": {
     "url": "https://github.com/fedwiki/wiki-plugin-rollup/issues"
   },
+  "type": "module",
   "engines": {
-    "node": ">=0.10"
+    "node": ">=20"
   }
 }
